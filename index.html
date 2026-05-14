@@ -38,10 +38,9 @@
     }
 
     .hero {
-      min-height: 720px;
       display: flex;
       align-items: center;
-      padding: 56px;
+      padding: 80px 56px 48px;
       background-image:
         linear-gradient(90deg, rgba(0,0,0,.92) 0%, rgba(0,0,0,.72) 34%, rgba(0,0,0,.22) 68%, rgba(0,0,0,.08) 100%),
         url('cat-tunnel.png');
@@ -307,6 +306,7 @@
         </form>
 
         <p class="note">Get updates on development, playtests, and launch.</p>
+        <div style="margin-top: 20px;"><script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '0d5f88', 'V7V21ZJBAY');kofiwidget2.draw();</script></div>
       </div>
     </section>
 
@@ -356,22 +356,32 @@
     </footer>
   </main>
   <script>
-    const WEBHOOK_URL = "https://hook.us2.make.com/fpd97kyzxrdindnps5wd9i9hyp9cvtkp";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwanbeBjEW9Ssey3cR5m8QFbc86hnIRLROEScrBa6DysMgqBLMMw3rnSSduTZLPTPZL/exec";
 
-    document.querySelectorAll(".signup-form, .footer-form").forEach(form => {
-      form.addEventListener("submit", async function(e) {
-        e.preventDefault();
-        const email = this.querySelector('input[type="email"]').value;
+document.querySelectorAll(".signup-form, .footer-form").forEach(form => {
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const email = this.querySelector('input[type="email"]').value;
+    const button = this.querySelector("button");
+    
+    button.disabled = true;
+    button.textContent = "Sending...";
 
-        await fetch(WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email })
-        });
-
-        this.innerHTML = "<p>You're on the list!</p>";
+    try {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email })
       });
-    });
+
+      this.innerHTML = "<p>Check your email to confirm. 🐾</p>";
+    } catch (err) {
+      button.disabled = false;
+      button.textContent = "Try again";
+    }
+  });
+});
   </script>
 </body>
 </html>
